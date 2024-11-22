@@ -91,9 +91,10 @@ class Bank(threading.Thread):
     def deposit(self):
         for i in range(100):
             rand_int=random.randint(50,500)
-            self.balance=self.balance+rand_int
+
             if self.balance>500 and lock.locked():
                 lock.release()
+            self.balance = self.balance + rand_int
             print(f"Пополнение: {rand_int}. Баланс: {self.balance}")
             time.sleep(0.001)
 
@@ -110,9 +111,9 @@ class Bank(threading.Thread):
             time.sleep(0.001)
 
 
-bk = Bank(300)
-th1 = threading.Thread(target=Bank.deposit, args=(bk,))
-th2 = threading.Thread(target=Bank.take, args=(bk,))
+bk = Bank(100)
+th1 = threading.Thread(target=bk.deposit)
+th2 = threading.Thread(target=bk.take)
 
 th1.start()
 th2.start()
